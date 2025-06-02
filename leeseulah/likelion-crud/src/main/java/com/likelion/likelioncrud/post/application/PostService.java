@@ -1,5 +1,7 @@
 package com.likelion.likelioncrud.post.application;
 
+import com.likelion.likelioncrud.common.error.ErrorCode;
+import com.likelion.likelioncrud.common.exception.BusinessException;
 import com.likelion.likelioncrud.member.domain.Member;
 import com.likelion.likelioncrud.member.domain.repository.MemberRepository;
 import com.likelion.likelioncrud.post.api.dto.request.PostSaveRequestDto;
@@ -64,12 +66,7 @@ public class PostService {
         List<Post> posts = postRepository.findByMember(member);
 
         List<PostInfoResponseDto> dtoList = posts.stream()
-                .map(post -> {
-                    List<String> tagNames = postTagRepository.findByPost(post).stream()
-                            .map(pt -> pt.getTag().getName())
-                            .toList();
-                    return PostInfoResponseDto.from(post, tagNames);
-                })
+                .map(PostInfoResponseDto::from)
                 .toList();
 
         return PostListResponseDto.from(dtoList);
@@ -79,7 +76,7 @@ public class PostService {
     @Transactional
     public void postUpdate(Long postId, PostUpdateRequestDto dto) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. id=" + postId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_EXCEPTION, "게시글을 찾을 수 없습니다. id=" + postId));
 
         post.update(dto);
 

@@ -20,7 +20,9 @@ public class TagService {
 
     @Transactional
     public TagInfoResponseDto save(TagSaveRequestDto dto) {
-        Tag tag = Tag.builder().name(dto.name()).build();
+        Tag tag = Tag.builder()
+                .name(dto.name())
+                .build();
         return TagInfoResponseDto.from(tagRepository.save(tag));
     }
 
@@ -48,6 +50,8 @@ public class TagService {
 
     @Transactional
     public void delete(Long id) {
-        tagRepository.deleteById(id);
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 태그가 없습니다. id=" + id));
+        tagRepository.delete(tag);
     }
 }

@@ -12,12 +12,16 @@ public record PostInfoResponseDto(
         String writer,
         List<String> tagIds
 ) {
-    public static PostInfoResponseDto from(Post post, List<String> tagIds) {
+    public static PostInfoResponseDto from(Post post) {
+        List<String> tagNames = post.getPostTags().stream()
+                .map(postTag -> postTag.getTag().getName())
+                .toList();
+
         return PostInfoResponseDto.builder()
                 .title(post.getTitle())
                 .contents(post.getContents())
                 .writer(post.getMember().getName())
-                .tagIds(tagIds)
+                .tagIds(tagNames)
                 .build();
     }
 }

@@ -20,37 +20,31 @@ public class PostController {
 
     // 게시물 저장
     @PostMapping("/save")
-    public ResponseEntity<ApiResTemplate<Void>> postSave(@RequestBody @Valid PostSaveRequestDto postSaveRequestDto) {
+    public ApiResTemplate<Void> postSave(@RequestBody @Valid PostSaveRequestDto postSaveRequestDto) {
         postService.postSave(postSaveRequestDto);
-        return ResponseEntity
-                .status(SuccessCode.POST_SAVE_SUCCESS.getHttpStatus())
-                .body(ApiResTemplate.successResponse(SuccessCode.POST_SAVE_SUCCESS, null));
+        return ApiResTemplate.successResponse(SuccessCode.POST_SAVE_SUCCESS, null);
     }
 
     // 사용자 id를 기준으로 해당 사용자가 작성한 게시글 목록 조회
     @GetMapping("/{memberId}")
-    public ResponseEntity<ApiResTemplate<PostListResponseDto>> myPostFindAll(@PathVariable("memberId") Long memberId) {
+    public ApiResTemplate<PostListResponseDto> myPostFindAll(@PathVariable("memberId") Long memberId) {
         PostListResponseDto postListResponseDto = postService.postFindMember(memberId);
-        return ResponseEntity
-                .ok(ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, postListResponseDto));
+        return ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, postListResponseDto);
     }
 
     // 게시물 id를 기준으로 사용자가 작성한 게시물 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<ApiResTemplate<Void>> postUpdate(
+    public ApiResTemplate<Void> postUpdate(
             @PathVariable("postId") Long postId,
             @RequestBody PostUpdateRequestDto postUpdateRequestDto) {
         postService.postUpdate(postId, postUpdateRequestDto);
-        return ResponseEntity
-                .ok(ApiResTemplate.successResponse(SuccessCode.POST_UPDATE_SUCCESS, null));
+        return ApiResTemplate.successResponse(SuccessCode.POST_UPDATE_SUCCESS, null);
     }
 
     // 게시물 id를 기준으로 사용자가 작성한 게시물 삭제
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResTemplate<Void>> postDelete(
-            @PathVariable("postId") Long postId) {
+    public ApiResTemplate<Void> postDelete(@PathVariable("postId") Long postId) {
         postService.postDelete(postId);
-        return ResponseEntity
-                .ok(ApiResTemplate.successResponse(SuccessCode.POST_DELETE_SUCCESS, null));
+        return ApiResTemplate.successResponse(SuccessCode.POST_DELETE_SUCCESS, null);
     }
 }

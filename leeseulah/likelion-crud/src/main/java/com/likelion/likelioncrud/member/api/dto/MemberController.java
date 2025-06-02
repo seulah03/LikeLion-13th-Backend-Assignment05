@@ -39,24 +39,19 @@ public class MemberController {
         MemberInfoResponseDto memberInfoResponseDto = memberService.memberFindOne(memberId);
         return ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, memberInfoResponseDto);
     }
+
     @PatchMapping ("/{memberId}")
     public ResponseEntity<String> memberUpdate(
             @PathVariable("memberId") Long memberId,
             @RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
         memberService.memberUpdate(memberId, memberUpdateRequestDto);
         return new ResponseEntity<>("사용자 수정", HttpStatus.OK);
-
-
     }
+
     public ResponseEntity<String> memberDlete(
             @PathVariable("memberId") Long memberId)
             {
         memberService.memberDelete(memberId);
         return new ResponseEntity<>("사용자 삭제", HttpStatus.OK);
-
-
     }
-
-
-
 }
